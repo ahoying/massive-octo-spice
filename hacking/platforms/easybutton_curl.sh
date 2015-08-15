@@ -22,9 +22,12 @@ if [ -f /etc/lsb-release ]; then
 elif [ -f /etc/debian_version ]; then
     OS=Debian  # XXX or Ubuntu??
     VER=$(cat /etc/debian_version)
+elif [ -f /etc/centos-release ]; then
+    OS=CentOS
+    VER=`rpm -q --queryformat '%{VERSION}' centos-release`
 elif [ -f /etc/redhat-release ]; then
     # TODO add code for Red Hat and CentOS here
-    ...
+    echo "Add support for RHEL, pull requests are appreciated!"
 else
     OS=$(uname -s)
     VER=$(uname -r)
@@ -49,6 +52,12 @@ case $OS in
         echo 'Redhat not yet supported...' ;;
 
     "CentOS" )
+        yum -y update && yum -y groupinstall 'Development Tools' && yum -y install htop git wget
+        git clone https://github.com/csirtgadgets/massive-octo-spice.git -b $BRANCH
+        cd massive-octo-spice
+        bash autogen.sh
+        sudo bash ./hacking/platforms/easybutton.sh
+        sudo chown `whoami`:`whoami` ~/.cif.yml 
         echo 'CentOS not yet supported...' ;;
 
 esac

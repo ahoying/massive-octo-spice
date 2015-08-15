@@ -19,7 +19,7 @@ elif [ -f /etc/debian_version ]; then
     VER=$(cat /etc/debian_version)
 elif [ -f /etc/redhat-release ]; then
     # TODO add code for Red Hat and CentOS here
-    ...
+    echo "fix me: line 22"
 else
     OS=$(uname -s)
     VER=$(uname -r)

@@ -34,9 +34,13 @@ if [ -f /etc/lsb-release ]; then
 elif [ -f /etc/debian_version ]; then
     OS=Debian  # XXX or Ubuntu??
     VER=$(cat /etc/debian_version)
+elif [ -f /etc/centos-release ]; then
+    OS=CentOS
+    VER=`rpm -q --queryformat '%{VERSION}' centos-release`
 elif [ -f /etc/redhat-release ]; then
-    # TODO add code for Red Hat and CentOS here
-    ...
+    # add Redhat code here
+    echo "Redhat not currently supported, pull requests are welcome!"
+    exit 1
 else
     OS=$(uname -s)
     VER=$(uname -r)
@@ -47,6 +51,7 @@ case $OS in
     	if [ $VER != "14.04" ]; then
     		echo "Currently only 14.04 LTS is supported"
     		echo "We accept Pull Requests! =)"
+                exit 1
     	else
         	cd ubuntu
        		bash ./ubuntu.sh
@@ -66,7 +71,14 @@ case $OS in
         exit 1;;
 
     "CentOS" )
-        echo 'CentOS not yet supported...'
-        exit 1;;
+        if [ $VER != "7" ]; then
+               echo "Currently only CentOS 7 is supported"
+               echo "Pull requests are welcome!"
+               exit 1
+        else
+               cd centos
+               bash ./centos.sh
+        fi
+        ;;
 
 esac
