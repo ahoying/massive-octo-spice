@@ -3,16 +3,16 @@
 set -e
 shopt -s expand_aliases
 
-. /etc/lsb-release
-
-MYUSER=cif
-MYGROUP=cif
 
 # temporary
 echo "This script (centos.sh) needs to be ported from Ubuntu to Centos"
 echo "Pull requests are welcome!"
 exit 1
 
+#. /etc/lsb-release
+#
+#MYUSER=cif
+#MYGROUP=cif
 #VER=$DISTRIB_RELEASE
 #
 #if [ `whoami` != 'root' ]; then
