@@ -6,13 +6,13 @@ BRANCH="master"
 ARCH=`/bin/uname -m`
 
 if [ `whoami` != 'root' ]; then
-	echo "ERROR: must be run as root"
-	exit 0
+    echo "ERROR: must be run as root"
+    exit 1
 fi
 
 if [ $ARCH != 'x86_64' ]; then
     echo "ERROR: must install on a 64-bit OS"
-    exit 0
+    exit 1
 fi
 
 if [ -f /etc/lsb-release ]; then
@@ -27,7 +27,8 @@ elif [ -f /etc/centos-release ]; then
     VER=`rpm -q --queryformat '%{VERSION}' centos-release`
 elif [ -f /etc/redhat-release ]; then
     # TODO add code for Red Hat and CentOS here
-    echo "Add support for RHEL, pull requests are appreciated!"
+    echo "Redhat is not supported, pull requests are appreciated!"
+    exit 1
 else
     OS=$(uname -s)
     VER=$(uname -r)
@@ -43,7 +44,7 @@ case $OS in
         sudo chown `whoami`:`whoami` ~/.cif.yml;;
 
     "Debian" )
-		echo 'Debian not yet supported...';;
+        echo 'Debian not yet supported...';;
 
     "Darwin" )
         echo 'Darwin not yet supported...' ;;
@@ -58,6 +59,5 @@ case $OS in
         bash autogen.sh
         sudo bash ./hacking/platforms/easybutton.sh
         sudo chown `whoami`:`whoami` ~/.cif.yml 
-        echo 'CentOS not yet supported...' ;;
 
 esac
