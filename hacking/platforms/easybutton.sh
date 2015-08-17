@@ -71,8 +71,8 @@ case $OS in
         exit 1;;
 
     "CentOS" )
-        if [ $VER != "7" ]; then
-               echo "Currently only CentOS 7 is supported"
+        if [ $VER != "6" ]; then
+               echo "Currently only CentOS 6 is supported"
                echo "Pull requests are welcome!"
                exit 1
         else
