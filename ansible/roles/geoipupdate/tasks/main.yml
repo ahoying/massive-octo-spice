@@ -1,16 +1,29 @@
 ---
 # tasks file for geoipupdate
 
-- name: Add maxmind ppa
+- name: Add maxmind ppa Ubuntu
   apt_repository: repo='ppa:maxmind/ppa' update_cache=yes
+  when: ansible_distribution == "Ubuntu"
 
-- name: Install geoipupdate
+- name: Install geoipupdate Ubuntu
   apt: pkg={{ item }}  state=installed update_cache=true
   with_items:
     - geoipupdate
+  when: ansible_distribution == "Ubuntu"
 
-- name: "Setting GeoIP.conf"
+- name: "Setting GeoIP.conf Ubuntu"
   template: src=GeoIP.conf.j2 dest=/etc/GeoIP.conf
+  when: ansible_distribution == "Ubuntu"
 
-- name: "Setting geoipupdate cron"
+- name: "Setting geoipupdate cron Ubuntu"
   template: src=geoipupdate.cron.j2 dest=/etc/cron.monthly/geoipupdate.sh mode=755
+  when: ansible_distribution == "Ubuntu"
+
+- name: Install geoipupdate RedHat
+  yum: name={{ item }} state=latest
+  with_items:
+    - geoipupdate
+    - geoipupdate-cron
+    - geoipupdate-cron6
+  when: ansible_os_family == "RedHat"
+

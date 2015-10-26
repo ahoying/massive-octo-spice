@@ -1,0 +1,12 @@
+---
+# tasks file for epel
+
+- name: Check epel repo exists RedHat
+  stat: path=/etc/yum.repos.d/epel.repo
+  register: epel
+  when: ansible_os_family == "RedHat"
+
+- name: Install epel repository RedHat
+  yum: name=https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm state=present
+  when: ansible_os_family == "RedHat" and epel.stat.exists == False
+

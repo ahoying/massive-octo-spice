@@ -4,15 +4,10 @@
   sudo: True
   vars:
   roles:
-    - { role: ubuntu-check, tags: role-ubuntu-check }
+    - { role: os-check, tags: role-os-check }
     - { role: firewall, tags: role-firewall }
     - { role: zmq, tags: role-zmq }
+    - { role: epel, tags: role-epel }
     - { role: geoipupdate, tags: role-geoipupdate }
     - { role: elasticsearch, tags: role-elasticsearch }
-    - { role: apache2, tags: role-apache2 }
-    - { role: postfix, tags: role-postfix }
-    - { role: bind9, tags: role-bind9 }
-    - { role: openntpd, tags: role-openntpd }
-    - { role: cifv2, tags: role-cifv2 }
-    - { role: monit, tags: role-monit }
   tasks:
