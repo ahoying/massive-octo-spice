@@ -40,8 +40,8 @@
    - java-1.7.0-openjdk
    - elasticsearch
   notify: restart elasticsearch
-  when: ansible_distribution == "RedHat"
+  when: ansible_os_family == "RedHat"
 
 - name: "Configure elasticsearch service RedHat"
   command: chkconfig elasticsearch on
-  when: ansible_distribution == "RedHat"
+  when: ansible_os_family == "RedHat"

@@ -6,12 +6,14 @@
   with_items:
    - postfix
    - mailutils
+  when: ansible_distribution == "Ubuntu"
 
 - name: create postfix configuration
   template: src={{item}}.j2 dest={{postfix_conf_dir}}/{{item}} mode=0644 owner=root group=root
   notify: restart postfix
   with_items:
     - main.cf
+  when: ansible_distribution == "Ubuntu"
 
 - name: ensure postfix is running
   service: name=postfix state=running enabled=yes

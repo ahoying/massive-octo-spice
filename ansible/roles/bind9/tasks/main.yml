@@ -1,21 +1,50 @@
 ---
 # tasks file for bind9
 
-- name: Install bind9
+- name: Install bind9 Ubuntu
   apt: pkg=bind9 state=installed update_cache=true cache_valid_time=86400
   notify: restart bind9
+  when: ansible_distribution == "Ubuntu"
 
-- name: "Setting named.conf.options"
+- name: "Setting named.conf.options Ubuntu"
   template: src=named.conf.options.j2 dest=/etc/bind/named.conf.options
+  when: ansible_distribution == "Ubuntu"
 
-- name: "Setting named.conf.local"
+- name: "Setting named.conf.local Ubuntu"
   template: src=named.conf.local.j2 dest=/etc/bind/named.conf.local
+  when: ansible_distribution == "Ubuntu"
 
-- name: "Setting dhclient.conf"
+- name: "Setting dhclient.conf Ubuntu"
   template: src=dhclient.conf.j2 dest=/etc/dhcp/dhclient.conf
+  when: ansible_distribution == "Ubuntu"
 
-- name: "Setting /etc/resolvconf/resolv.conf.d/base"
+- name: "Setting /etc/resolvconf/resolv.conf.d/base Ubuntu"
   template: src=base.j2 dest=/etc/resolvconf/resolv.conf.d/base
+  when: ansible_distribution == "Ubuntu"
+
+- name: "Install bind RedHat"
+  yum: name=bind state=installed
+  when: ansible_os_family == "RedHat"
+
+- name: "Setting named.conf RedHat"
+  template: src=redhat-named.conf.j2 dest=/etc/named.conf
+  when: ansible_os_family == "RedHat"
+
+- name: "Setting named.conf.local RedHat"
+  template: src=named.conf.local.j2 dest=/etc/named/named.conf.local
+  when: ansible_os_family == "RedHat"
+
+- name: "Setting dhclient.conf RedHat"
+  lineinfile: dest=/etc/dhcp/dhclient-eth0.conf
+              regexp="^supersede domain-name-servers 127.0.0.1;$"
+              line="supersede domain-name-servers 127.0.0.1;"
+              insertafter=EOF
+  when: ansible_os_family == "RedHat"
+
+- name: "Installing named service RedHat"
+  service: name=named state=started enabled=yes
+  when: ansible_os_family == "RedHat"
 
 - name: "Restart networking"
   command: bash -c "ifdown eth0 && ifup eth0"
+

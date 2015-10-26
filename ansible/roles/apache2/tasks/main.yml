@@ -1,47 +1,84 @@
 ---
 # tasks file for apache2
 
-- name: Install apache
+- name: Install apache Ubuntu
   apt: pkg={{ item }} state=installed update_cache=true
   with_items:
    - apache2
    - libapache2-mod-perl2
+  when: ansible_distribution == "Ubuntu"
 
-- name: "Install cif.conf"
+- name: "Install cif.conf Ubuntu"
   template: src=cif.conf.j2 dest=/etc/apache2/cif.conf
   notify:
     - restart apache2
+  when: ansible_distribution == "Ubuntu"
 
-- name: "Install default-ssl.conf"
+- name: "Install default-ssl.conf Ubuntu"
   template: src=default-ssl.conf.j2 dest=/etc/apache2/sites-available/default-ssl.conf
   notify:
     - restart apache2
+  when: ansible_distribution == "Ubuntu"
 
-- name: "Disable 000-default.conf"
+- name: "Disable 000-default.conf Ubuntu"
   command: a2dissite 000-default.conf
+  when: ansible_distribution == "Ubuntu"
 
-- name: "Enable default-ssl.conf"
+- name: "Enable default-ssl.conf Ubuntu"
   command: a2ensite default-ssl.conf
+  when: ansible_distribution == "Ubuntu"
 
-- name: "Install security.conf"
+- name: "Install security.conf Ubuntu"
   template: src=security.conf.j2 dest=/etc/apache2/conf-enabled/security.conf
   notify:
     - restart apache2
+  when: ansible_distribution == "Ubuntu"
 
-- name: "Install servername.conf"
+- name: "Install servername.conf Ubuntu"
   template: src=servername.conf.j2 dest=/etc/apache2/conf-available/servername.conf
   notify:
     - restart apache2
+  when: ansible_distribution == "Ubuntu"
 
-- name: "Enable servername.conf"
+- name: "Enable servername.conf Ubuntu"
   command: a2enconf servername
+  when: ansible_distribution == "Ubuntu"
 
-- name: "Enable apach2 modules - ssl proxy proxy_http"
+- name: "Enable apach2 modules - ssl proxy proxy_http Ubuntu"
   command: a2enmod {{ item }}
   with_items:
     - ssl
     - proxy
     - proxy_http
+  when: ansible_distribution == "Ubuntu"
+
+- name: Install apache RedHat
+  yum: name={{ item }} state=installed update_cache=true
+  with_items:
+   - httpd
+   - mod_perl
+   - mod_ssl
+  when: ansible_os_family == "RedHat"
+
+- name: "Start httpd service RedHat"
+  service: name=httpd state=started
+  when: ansible_os_family == "RedHat"
+
+- name: "Enable httpd service RedHat"
+  command: chkconfig httpd on
+  when: ansible_os_family == "RedHat"
+
+- name: "Install cif.conf RedHat"
+  template: src=cif.conf.j2 dest=/etc/httpd/cif.conf
+  when: ansible_os_family == "RedHat"
+
+- name: "Install ssl.conf RedHat"
+  template: src=ssl.conf.j2 dest=/etc/httpd/conf.d/ssl.conf
+  notify:
+    - restart httpd
+  when: ansible_os_family == "RedHat"
+
+
 # in an all in one box, we need to restart ES after apache is configured
 # in split roles this may need to be different. 
 - name: restart elasticsearch

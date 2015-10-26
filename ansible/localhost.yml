@@ -10,4 +10,9 @@
     - { role: epel, tags: role-epel }
     - { role: geoipupdate, tags: role-geoipupdate }
     - { role: elasticsearch, tags: role-elasticsearch }
+    - { role: apache2, tags: role-apache2 }
+    - { role: postfix, tags: role-postfix }
+    - { role: bind9, tags: role-bind9 }
+    - { role: openntpd, tags: role-openntpd }
+    - { role: cifv2, tags: role-cifv2 }
   tasks:
