@@ -1,0 +1,16 @@
+---
+# tasks file for os-check
+- name: "Check for 64-bit"
+  fail: msg="Must be install 64-bit"
+  when: ansible_architecture != "x86_64"
+- name: "Check for Ubuntu 14.04"
+  set_fact:
+    supported_os: true
+  when: ansible_distribution == "Ubuntu" and ansible_distribution_version == "14.04"
+- name: "Check for RHEL 6"
+  set_fact:
+    supported_os: true
+  when: ansible_os_family == 'RedHat' and ansible_lsb.major_release|int == 6
+- name: "Check for supported OS"
+  fail: msg="System OS is not supported"
+  when: supported_os != true
